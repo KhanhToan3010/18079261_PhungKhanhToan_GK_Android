@@ -47,7 +47,8 @@ public class SongActivity extends AppCompatActivity {
         next =findViewById(R.id.skip_next);
         songTitle =findViewById(R.id.songTitle);
         songSinger =findViewById(R.id.songSinger);
-
+        mSeekBarTime =findViewById(R.id.seekBarTime);
+        mSeekBarVol =findViewById(R.id.seekBarVol);
 
         playerDuration =findViewById(R.id.playerDuration);
         playerPosition =findViewById(R.id.playerPosition);
@@ -82,14 +83,30 @@ public class SongActivity extends AppCompatActivity {
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         int maxV = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
         int curV = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        mSeekBarVol.setMax(maxV);
+        mSeekBarVol.setProgress(curV);
 
+        mSeekBarVol.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC,progress,0);
+            }
 
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
 
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
 
         play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                mSeekBarTime.setMax(mMediaPlayer.getDuration());
                 if(mMediaPlayer != null && mMediaPlayer.isPlaying()){
                     mMediaPlayer.pause();
                     play.setImageResource(R.drawable.ic_pause);
@@ -182,13 +199,13 @@ public class SongActivity extends AppCompatActivity {
     }
 
     private void sendActiontoServie(int action, Song song){
-
+        Toast.makeText(this, "kkkkk", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(SongActivity.this, MyService.class);
 
         intent.putExtra("action_music_service", action);
         intent.putExtra("object_song",song);
         startService(intent);
-
+        Toast.makeText(this, "huhuhu", Toast.LENGTH_SHORT).show();
     }
     private void SongNames(){
         Song song = mSongs.get(currentIndex);
@@ -197,8 +214,34 @@ public class SongActivity extends AppCompatActivity {
         songSinger.setText(song.getSingle());
 
 
+        mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                mSeekBarTime.setMax(mMediaPlayer.getDuration());
+                mMediaPlayer.start();
+            }
+        });
 
+        mSeekBarTime.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (fromUser){
+                    mMediaPlayer.seekTo(progress);
+                    mSeekBarTime.setProgress(progress);
+                }
+                playerPosition.setText(convertFormat(mMediaPlayer.getCurrentPosition()));
+            }
 
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
         new Thread(new Runnable() {
             @Override
             public void run() {

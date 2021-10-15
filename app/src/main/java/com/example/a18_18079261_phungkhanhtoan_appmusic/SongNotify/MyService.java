@@ -1,6 +1,6 @@
 package com.example.a18_18079261_phungkhanhtoan_appmusic.SongNotify;
 
-import static com.example.a18_18079261_phungkhanhtoan_appmusic.SongNotify.MyApplication.CHANNEL_ID;
+import static com.example.thigk_1.SongNotify.MyApplication.CHANNEL_ID;
 
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -19,9 +19,9 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import com.example.a18_18079261_phungkhanhtoan_appmusic.MainActivity;
-import com.example.a18_18079261_phungkhanhtoan_appmusic.R;
-import com.example.a18_18079261_phungkhanhtoan_appmusic.Song;
+import com.example.thigk_1.MainActivity;
+import com.example.thigk_1.R;
+import com.example.thigk_1.Song;
 
 public class MyService extends Service {
 
@@ -38,7 +38,7 @@ public class MyService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.e("Toan", "My Service onCreate");
+        Log.e("Toàn", "My Service onCreate");
     }
 
     @Nullable
@@ -54,14 +54,14 @@ public class MyService extends Service {
 
             if(song != null){
                 mSong = song;
-                   startMusic(song);
+                startMusic(song);
                 Log.e("TAG", "onStartCommand: " );
-                sendNotification(song);
+
             }
         }
 
         int actionMusic = intent.getIntExtra("action_music_service",0);
-        Log.e("Toan","hihi" +actionMusic);
+        Log.e("Toàn","abbbbb" +actionMusic);
         handleActionMusic(actionMusic);
 
         return START_NOT_STICKY;
@@ -71,7 +71,7 @@ public class MyService extends Service {
         if(mMediaPlayer == null){
             mMediaPlayer = MediaPlayer.create(getApplicationContext(),song.getResource());
         }
-       mMediaPlayer.start();
+        mMediaPlayer.start();
         isPlaying = true;
         sendActiontoActivity(ACTION_START);
     }
@@ -90,7 +90,7 @@ public class MyService extends Service {
                 break;
             case  ACTION_START:
                 startMusic(mSong);
-                sendNotification(mSong);
+
                 break;
         }
     }
@@ -99,56 +99,26 @@ public class MyService extends Service {
         if(mMediaPlayer != null && isPlaying==true){
             mMediaPlayer.pause();
             isPlaying=false;
-            sendNotification(mSong);
-            sendActiontoActivity(ACTION_PAUSE);
+
         }
 
 
     }
     private void resumMusic(){
         if(mMediaPlayer != null && isPlaying==false){
-               mMediaPlayer.start();
+            mMediaPlayer.start();
             isPlaying = true;
-            sendNotification(mSong);
-            sendActiontoActivity(ACTION_RESUME);
+
         }
     }
 
 
-    private void sendNotification(Song song) {
-        Intent intent = new Intent(this, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), song.getImage());
-
-
-        RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.layout_custom_notification);
-        remoteViews.setTextViewText(R.id.tv_title_song, song.getTitle());
-        remoteViews.setTextViewText(R.id.tv_single_song, song.getSingle());
-        remoteViews.setImageViewBitmap(R.id.img_song, bitmap);
-
-
-        remoteViews.setImageViewResource(R.id.img_play_or_pause, R.drawable.ic_play);
-        remoteViews.setImageViewResource(R.id.img_clear, R.drawable.ic_clear);
-
-
-        if (isPlaying) {
-
-            remoteViews.setOnClickPendingIntent(R.id.img_play_or_pause, getPendingIntent(this, ACTION_PAUSE));
-            remoteViews.setImageViewResource(R.id.img_play_or_pause, R.drawable.ic_pause);
-        } else {
-            remoteViews.setOnClickPendingIntent(R.id.img_play_or_pause, getPendingIntent(this, ACTION_RESUME));
-            remoteViews.setImageViewResource(R.id.img_play_or_pause, R.drawable.ic_play);
-        }
-
-        remoteViews.setOnClickPendingIntent(R.id.img_clear, getPendingIntent(this, ACTION_CLEAR));
-
-    }
 
     private PendingIntent getPendingIntent( Context context, int action){
-        Intent intent = new Intent(this, MyReceiver.class);
+        Intent intent = new Intent(this, MyReceiver.class);//truỳen action sang my Rêciver
         intent.putExtra("action_music",action);
-
+        Log.e("Tincoder",action+"" );
         return PendingIntent.getBroadcast(context.getApplicationContext(),action, intent,PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
