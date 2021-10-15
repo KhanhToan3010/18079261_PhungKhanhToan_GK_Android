@@ -94,7 +94,7 @@
         <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:src="@drawable/soundmin" />
+            android:src="@drawable/soundm" />
 
         <SeekBar
             android:id="@+id/seekBarVol"
@@ -130,7 +130,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/bt_ff"
         app:layout_constraintStart_toEndOf="@+id/bt_ff"
         app:layout_constraintTop_toTopOf="@+id/bt_ff"
-        app:srcCompat="@drawable/skip_next" />
+        app:srcCompat="@drawable/next" />
 
     <ImageView
         android:id="@+id/skip_previous"
@@ -140,7 +140,7 @@
         android:layout_marginTop="40dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/seekBarTime"
-        app:srcCompat="@drawable/skip_previous" />
+        app:srcCompat="@drawable/previous" />
 
     <ImageView
         android:id="@+id/bt_rew"
@@ -151,7 +151,7 @@
         app:layout_constraintStart_toEndOf="@+id/skip_previous"
         app:layout_constraintTop_toTopOf="@+id/skip_previous"
         app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/ic_fast_rewind" />
+        app:srcCompat="@drawable/ic_rewind" />
 
     <ImageView
         android:id="@+id/bt_ff"
@@ -161,6 +161,6 @@
         app:layout_constraintBottom_toBottomOf="@+id/ic_play"
         app:layout_constraintStart_toEndOf="@+id/ic_play"
         app:layout_constraintTop_toTopOf="@+id/ic_play"
-        app:srcCompat="@drawable/ic_fast_forward" />
+        app:srcCompat="@drawable/ic_forward" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
