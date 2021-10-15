@@ -199,13 +199,13 @@ public class SongActivity extends AppCompatActivity {
     }
 
     private void sendActiontoServie(int action, Song song){
-           Toast.makeText(this, "aaa", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "kkkkk", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(SongActivity.this, MyService.class);
 
         intent.putExtra("action_music_service", action);
         intent.putExtra("object_song",song);
         startService(intent);
-        Toast.makeText(this, "bbb", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "huhuhu", Toast.LENGTH_SHORT).show();
     }
     private void SongNames(){
         Song song = mSongs.get(currentIndex);

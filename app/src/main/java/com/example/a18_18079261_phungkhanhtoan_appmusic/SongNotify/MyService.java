@@ -38,7 +38,7 @@ public class MyService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.e("Hoang", "My Service onCreate");
+        Log.e("Toàn", "My Service onCreate");
     }
 
     @Nullable
@@ -56,12 +56,12 @@ public class MyService extends Service {
                 mSong = song;
                 startMusic(song);
                 Log.e("TAG", "onStartCommand: " );
-                sendNotification(song);
+
             }
         }
 
         int actionMusic = intent.getIntExtra("action_music_service",0);
-        Log.e("Hoang","abbbbb" +actionMusic);
+        Log.e("Toàn","abbbbb" +actionMusic);
         handleActionMusic(actionMusic);
 
         return START_NOT_STICKY;
@@ -90,7 +90,7 @@ public class MyService extends Service {
                 break;
             case  ACTION_START:
                 startMusic(mSong);
-                sendNotification(mSong);
+
                 break;
         }
     }
@@ -99,60 +99,21 @@ public class MyService extends Service {
         if(mMediaPlayer != null && isPlaying==true){
             mMediaPlayer.pause();
             isPlaying=false;
-            sendNotification(mSong);
-            sendActiontoActivity(ACTION_PAUSE);
+
         }
 
 
     }
     private void resumMusic(){
         if(mMediaPlayer != null && isPlaying==false){
-            mMediaPlayer.start(); //tiếp tục chạy
+            mMediaPlayer.start();
             isPlaying = true;
-            sendNotification(mSong);
-            sendActiontoActivity(ACTION_RESUME);
+
         }
     }
 
 
-    private void sendNotification(Song song) {
-        Intent intent = new Intent(this,MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this,0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),song.getImage());
-
-
-        RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.layout_custom_notification);
-        remoteViews.setTextViewText(R.id.tv_title_song, song.getTitle());
-        remoteViews.setTextViewText(R.id.tv_single_song, song.getSingle());
-        remoteViews.setImageViewBitmap(R.id.img_song,bitmap);
-
-
-        remoteViews.setImageViewResource(R.id.img_play_or_pause,R.drawable.ic_play);
-        remoteViews.setImageViewResource(R.id.img_clear,R.drawable.ic_clear);
-
-
-        if(isPlaying){
-
-            remoteViews.setOnClickPendingIntent(R.id.img_play_or_pause,getPendingIntent(this, ACTION_PAUSE));
-            remoteViews.setImageViewResource(R.id.img_play_or_pause,R.drawable.ic_pause);
-        }else{
-            remoteViews.setOnClickPendingIntent(R.id.img_play_or_pause,getPendingIntent(this, ACTION_RESUME));
-            remoteViews.setImageViewResource(R.id.img_play_or_pause,R.drawable.ic_play);
-        }
-
-        remoteViews.setOnClickPendingIntent(R.id.img_clear,getPendingIntent(this, ACTION_CLEAR));
-
-        Notification notification = new NotificationCompat.Builder(this,CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_notification)
-                .setContentIntent(pendingIntent)
-                .setCustomContentView(remoteViews)
-                .setSound(null)
-                .build();
-
-        startForeground(1,notification);
-
-    }
 
     private PendingIntent getPendingIntent( Context context, int action){
         Intent intent = new Intent(this, MyReceiver.class);//truỳen action sang my Rêciver
